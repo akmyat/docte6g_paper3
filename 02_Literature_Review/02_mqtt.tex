@@ -1,0 +1,17 @@
+\subsection{MQTT}
+
+Message Queuing Telemetry Transport (MQTT) is a lightweight, client-server publish subscribe messaging protocol, standardized by OASIS for internet of things (IoT) and machine-to-machine (M2M) communication \cite{mqttv3.1.1}.
+It is designed for resource-constrained devices and low-bandwidth, high-latency networks, making it a foundational technology for IoT deployments in domains such as smart buildings, smart factories and smart warehouses.
+Digital Twins (DT) Applications — virtual counterparts of physical assets — are typically built on top of these IoT infrastructures. 
+MQTT plays a central role by enabling real-time data exchange between physical entities (e.g. sensors, robots, and actuators) and their virtual representations, thereby continuous monitoring, simulation, predictive analysis, and operaitional optimization.
+
+For simulation and research, MQTT has been implemented in ns-3 network simulator, allowing researchers to model publish/subscribe architectures and their integration with realistic wireless technologies such as WiFi, LoRaWAN and 5G.
+Simulating MQTT within ns-3 provides valuable insights for DT development: it enables quantification of key performance indicators (KPIs) such as synchronization delay, command success probability, reliability under congestion, and energy/network overhead prior to real-world deployment.
+
+However, existing MQTT implementations for ns-3 remain limited.
+In \cite{mqttns3}, the author has provided a compiled binary file (.so file) for the MQTT library in the ns-3 framework without source code, preventing meaningful modification, extension, or validation.
+Similarly, \cite{salimee2023mqttns3} reports an MQTT implementation in ns-3 targeted at smart building IoT applications, yet neither the source code nor binaries are publicly available.
+These limitations significantly hinder reproducibility and restrict the community's ability to perform practical scenario-driven studies.
+
+To address this gap, this research develops a fully open-source MQTT library for ns3.
+The implementation is evaluated through Digital Twin Application scenarios in smart-warehouse conditions, demonstrating its suitability for end-to-end DT studies and enabling reproducible experimentation for future researchers.
