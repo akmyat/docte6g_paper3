@@ -1,0 +1,14 @@
+\subsection{MQTT ns-3 Module}
+
+To support native publish-subscribe communiation within the ns-3 simulation environment, a complete implementation of the MQTT protocol version 3.1.1 was developed directly within ns-3 and is available at \url{https://gitlab.com/simulations9070736/mqtt.git}..
+The module consists of two main components: the MQTT client and the MQTT broker, which together provide an end-to-end MQTT stack suitable for IoT and DT simulations.
+
+The MQTT client implements the full set of MQTT control packets, including CONNECT, CONNACK, PUBLISH (QoS 0, 1, 2), SUBSCRIBE, SUBACK, UNSUBSCRIBE, UNSUBACK, and DISCONNECT.
+The client maintiains session state, manages retransmissions and handshake procedures for QoS level 1 and 2.
+
+The MQTT broker functions as the central coordination point, managing concurrent client sessions, decoding incoming control packets, performing topic-based routing, and executing the complete QoS handshake logic, including PUBACK, PUBREC/PUBREL, AND PUBCOMP sequences to guarantee exactly-once delivery.
+In addition, the broker implements mechanisms for client authentication, verifying CONNECT requests before establishing sessions and rejecting malformed or unauthorized connections.
+It also maintains session persistence, storing subscription information, pending QoS1 and 2 messages to ensure that message delivery is correctly resumed after client reconnection.
+
+Together, these components provide a comprehensive and extensible MQTT implementation that can operate over any ns-3 transport or wireless technology.
+This integrated design enable systematic evaluation of publish-subscribe workloads in IoT and DT scenarios, leveraging ns-3's rich networking models and simulation capabilities.
