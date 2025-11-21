@@ -1,0 +1,28 @@
+\subsection{Smart Warehouse Digital Twin Scenario Definition}
+
+The smart warehouse scenario \ref{fig:smart_warehouse_scenario} consists of interconnected cyber-physcial components that collaboratively store, retrieve, transport, monitor, and manage inventory within a warehouse environment. 
+The environment includes \textbf{mobile robots} responsible for picking, placing and transporting pakcages across the warehouse, \textbf{racks} equipped with storage availability sensors, \textbf{package sensors} that detect package arrival, \textbf{environmental sensors}: to monitor ambient temperature and humidity, and \textbf{video cameras} for safety monitoring.
+A centralized \textbf{controller} orchestrates the operations by assigning tasks, dispatching commands while maintaining global situational awareness.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/smart_warehouse_layout.png}
+    \caption{Smart Warehouse Digital Twin Scenario}
+    \label{fig:smart_warehouse_scenario}
+\end{figure}
+
+These components generate diverse traffic types:
+\begin{itemize}
+    \item Robot control commands (e.g. destination update, pick and place instructions), which require ultra-low latency (<10-20ms) and high relaiblity, as they influence mechanical actuatio and safety.
+    \item Status updates from environmental sensors, package sensors, and rack availability sensors, which produce periodic traffic with moderate latency requirements (<100-200ms).
+    \item Video streams from fixed cameras, which generate high-bandwidth data flow with tighter jitter constraints to support real-time monitoring.
+\end{itemize}
+Together, these heterogeneous traffic profiles reflect realistic operational conditions in a smart warehouse DT system.
+
+The component in the smart warehouse DT system and their interactions are illustrated in the class diagram in Figure \ref{fig:class_diagram_smart_warehouse_scenario}.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/smart_warehouse_app_class_diagram.png}
+    \caption{Class Diagram of Smart Warehouse Digital Twin System}
+    \label{fig:class_diagram_smart_warehouse_scenario}
+\end{figure}
