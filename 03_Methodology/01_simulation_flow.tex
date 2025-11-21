@@ -1,0 +1,85 @@
+\subsection{Simulation Workflow for MQTT in ns-3}
+To evaluate publish-subscribe communication under different network conditions, the MQTT protocol was deployed as ns-3 application layer module.
+The following steps outline the complete simulation workflow used to test MQTT applications and measure performance indicators such as throughput and end-to-end latency.
+
+\begin{enumerate}
+    \item \textbf{Node Creation and Global Configuration}: First, a dedicated MQTT broker node and a configurable set of client nodes are defined. Global simulation parameters such as time, random number generator seeds, and logging components are initialized to ensure reproduciblity and deterministric results across all simulation runs.
+    \item \textbf{Intenet Stack Installation and Wired Channel Configuration}: The baseline configuration is impleted upon a wired Ethernet and point-to-piont channel is installed between all nodes using \textit{CsmaHelper}. Internet stack is deployed using the standard \textit{InternetStackHelper}. IP addressing is then assigned using \textit{Ipv4AddressHelper}, ensuring end-to-end reachability between all MQTT clients and the broker.
+    \item \textbf{Configuration of Wireless or Cellular Access}: Depending on the scenario, nodes may communicate over Wi-Fi, LTE or 5G NR. To configure wireless access-network, access-network helpers (e.g. \textit{YansHelper}, \textit{LteHelper}, \textit{NrHelper}) are used to set up the physical and MAC layers, including channel models, frequency bands, and bandwidths. Nodes are then associated with the appropriate base stations or access points. The MQTT layer remains unchanged as all MQTT applications operate over TCP/IP irrespective of underlying link technology. This flexiblity enables direction comparison of MQTT performance accross heterogeneous networks.
+    \item \textbf{Configuration of MQTT Broker}: The MQTT broker is installed on the broker node as an instance of \textit{MqttBrokerApp}. The broker's runtime attributes such as listening TCP port, maximum QoS level supported, connection-timeout interval, retransmission interval are configured using \textit{SetAttribute} methods. Once started, the broker passively accepts incoming TCP sessions, decode control packets and perform topic-based routing to appropriate subscribers. The allowd usernames and passwords for client authentication are also set at this stage using \textit{SetUserAuthorizations} methods.
+    \item \textbf{Configuration of MQTT Clients}: Each MQTT client node is configured with an instance of \textit{MqttClientApp}. Client attributes such as broker IP address, port number, client identifier, username, password, and other qos related parameters and session related parameters are set using \textit{SetAttribute} methods. Subscription are configured through the client's topic list and QoS levels, which are thenn used to generate SUBSCRIBE control packets to send to the broker. Publishing is performed either periodically or via scheduled events using the \textit{sendPUBLISHpacket()} method.
+    \item \textbf{Execution of the Simulation and Data Collection}: Once all MQTT entities and network elements are configured, the simulation is executed using the ns-3 event scheduler. Measurements metrics such as throughput, loss rate, latency are obtained via the ns-3 \textit{FlowMonitor} module or custom tracing callbacks attached to MQTT events. The collected data is then processed and analyzed to evaluate the performance of MQTT under various network conditions and configurations.
+\end{enumerate}
+
+An example code snippet for configuring and installing the MQTT broker application on the broker node is shown in \ref{lst:mqtt_broker_config}.
+\begin{listing}[ht]
+    \caption{MQTT Broker Application Configuration in ns-3}
+    \label{lst:mqtt_broker_config}
+    \begin{minted}[fontsize=\tiny, linenos]{cpp}
+        // Create broker application
+        Ptr<MqttBrokerApp> broker = CreateObject<MqttBrokerApp>();
+
+        // Configure broker attributes
+        broker->SetAttribute("ListeningPort", UintegerValue(1883));   // Default MQTT port
+        broker->SetAttribute("MaxQoSLevel", UintegerValue(2));        // QoS 0–2 supported
+        broker->SetAttribute("ConnectionTimeout", TimeValue(Seconds(30)));
+        broker->SetAttribute("RetransmitTimeout", TimeValue(Seconds(2)));
+
+        // Install on broker node
+        brokerNode->AddApplication(broker);
+
+        // Application start/stop times
+        broker->SetStartTime(Seconds(0.5));
+        broker->SetStopTime(Seconds(simTime));
+    \end{minted}
+\end{listing}
+
+An example code snippet for configuring and installing an MQTT client application on a client node is shown in \ref{lst:mqtt_client_config}.
+\begin{listing}[ht]
+    \caption{MQTT Client Application Configuration in ns-3}
+    \label{lst:mqtt_client_config}
+    \begin{minted}[fontsize=\tiny, linenos]{cpp}
+        Ptr<MqttClientApp> client = CreateObject<MqttClientApp>();
+
+        // Configure broker endpoint
+        client->SetAttribute("BrokerAddress",
+            AddressValue(InetSocketAddress(brokerIp, 1883)));
+        client->SetAttribute("BrokerPort", UintegerValue(1883));
+
+        // Set MQTT session parameters
+        client->SetAttribute("ClientId", StringValue("client-01"));
+        client->SetAttribute("Username", StringValue("user"));
+        client->SetAttribute("Password", StringValue("password"));
+        client->SetAttribute("CleanSession", BooleanValue(true));
+        client->SetAttribute("KeepAlive", UintegerValue(60));
+        client->SetAttribute("RetransmitTimeout", TimeValue(Seconds(2)));
+
+        // Add application to node
+        clientNode->AddApplication(client);
+        client->SetStartTime(Seconds(1.0));
+        client->SetStopTime(Seconds(simTime));
+
+        /*********************
+        * SUBSCRIBING CLIENT
+        *********************/
+        std::vector<std::string> topics = {"sensor/temperature"};
+        std::vector<uint8_t> qos = {1};   // QoS 1 delivery
+        client->SetSUBSCRIBEtopics(topics, qos);
+
+        // Send SUBSCRIBE control packet
+        Simulator::Schedule(Seconds(1.2),
+            &MqttClientApp::SendSubscribeRequest, client);
+
+        /*********************
+        * PUBLISHING CLIENT
+        *********************/
+        Simulator::Schedule(Seconds(2.0),
+            &MqttClientApp::sendPUBLISHpacket,
+            client,
+            "sensor/temperature",          // topic
+            "23.5C",                       // payload
+            1,                             // QoS 1
+            false,                         // DUP flag
+            false);                        // Retain flag
+    \end{minted}
+\end{listing}
