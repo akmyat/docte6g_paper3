@@ -18,14 +18,14 @@ The controller control the video stream of camera by publishing command message 
 \end{figure}
 
 \textbf{Inventory Management System:} This subsystem illustrated in Figure \ref{fig:inventory_management_system}, is responsible for tracking and managing the inventory within the warehouse.
-Same as in the environmental monitoring system, all the inventory sensors register to controller using the topic \textit{/warehouse/sensor/[sensor\_name]/register} where the controller subscribe and listening on the topic \textit{/warehouse/sensor/[sensor\_name]/register}.
-The package sensor publish the notification message to the topic \textit{/warehouse/sensor/[sensor\_name]/package} whenever a package is arrived to warehouse.
-The controller subscribes to this topic and assign to the available robot to pick up the package and place on the rack.
-Both the rack sensor and dropzone sensor waits for the controller command on the topic \textit{/warehouse/rack/[sensor\_name]/commands} and \textit{/warehouse/dropzone/[sensor\_name]/commands} respectively.
-When the robot reaches to the rack, the controller publish the command to the topic \textit{/warehouse/rack/[sensor\_name]/commands/addPackage} to update the capacity of the rack.
-As soon as the dropzone receive request to retrieve the package, it notify the controller on the topic \textit{/warehouse/dropzone/[sensor\_name]/commands/retrievePackage} and controller assign robot to retrieve the package from the rack.
-Similar to place package operation, when the robot reaches to the rack, the controller publish the command to the topic \textit{/warehouse/rack/[sensor\_name]/commands/removePackage} to update the capacity of the rack.
-As soon as the robot  drop the package to the dropzone, the controller notify the customer or truck using the topic \textit{/warehouse/dropzone/[sensor\_name]/commands/dropPackage}.
+Similar to the environmental monitoring system, all the inventory sensors register to the controller using the topic \textit{/warehouse/sensor/[sensor\_name]/register} where the controller subscribes and listens to the topic \textit{/warehouse/sensor/[sensor\_name]/register}.
+The package sensor publishes the notification message to the topic \textit{/warehouse/sensor/[sensor\_name]/package} whenever a package arrives at the warehouse.
+The controller subscribes to this topic and assigns to the available robot to pick up the package and places it on the rack.
+Both the rack sensor and dropzone sensor wait for the controller command on the topic \textit{/warehouse/rack/[sensor\_name]/commands} and \textit{/warehouse/dropzone/[sensor\_name]/commands} respectively.
+When the robot reaches the rack, the controller publishes the command to the topic \textit{/warehouse/rack/[sensor\_name]/commands/addPackage} to update the capacity of the rack.
+As soon as the dropzone receives a request to retrieve the package, it notifies the controller on the topic \textit{/warehouse/dropzone/[sensor\_name]/commands/retrievePackage} and the controller assigns a robot to retrieve the package from the rack.
+Similar to the place package operation, when the robot reaches the rack, the controller publishes the command on the topic \textit{/warehouse/rack/[sensor\_name]/commands/removePackage} to update the capacity of the rack.
+As soon as the robot drops the package at the dropzone, the controller notifies the customer or truck using the topic \textit{/warehouse/dropzone/[sensor\_name]/commands/dropPackage}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\linewidth]{images/inventory_management_system.png}
@@ -34,9 +34,9 @@ As soon as the robot  drop the package to the dropzone, the controller notify th
 \end{figure}
 
 \textbf{Robot Management System:} This subsystem illustrated in Figure \ref{fig:robot_management_system}, manages the fleet of robots operating within the warehouse.
-All the robots register to controller using the topic \textit{/warehouse/robot/[robot\_name]/register} where the controller subscribe and listening on the topic \textit{/warehouse/robot/[robot\_name]/register}.
-All the PICKUP, PLACE, RETRIEVE, and DROP operation are assigned to the robot as task by the controller through the topic \textit{/warehouse/robot/[robot\_name]/command/assignTask}.
-When the robot complete the assigned task, it notify the controller by publishing message to the topic \textit{/warehouse/robot/[robot\_name]/status/taskCompleted}.
+All the robots register to controller using the topic \textit{/warehouse/robot/[robot\_name]/register} where the controller subscribes and listens to the topic \textit{/warehouse/robot/[robot\_name]/register}.
+All the PICKUP, PLACE, RETRIEVE, and DROP operation are assigned to the robot as tasks by the controller through the topic \textit{/warehouse/robot/[robot\_name]/command/assignTask}.
+When the robot completes the assigned task, it notifies the controller by publishing a message to the topic \textit{/warehouse/robot/[robot\_name]/status/taskCompleted}.
 
 \begin{figure}[ht]
     \centering
