@@ -1,0 +1,46 @@
+\subsection{Smart Warehouse Digital Twin Scenario Implementation using MQTT}
+
+The Smart Warehouse Digital Twin scenario is implemented using the MQTT protocol to facilitate communication between various components of the warehouse system. 
+The implementation consists of three main subsystems: Inventory Management System, Environmental Monitoring System, and Robot Management System. 
+Each subsystem utilizes MQTT topics to publish and subscribe to relevant data.
+
+\textbf{Environmental Monitoring System:} This subsystem illustrated in Figure \ref{fig:environmental_monitoring_system}, environmental parameters such as temperature and humidity within the warehouse.
+All the environmental sensors register to controller using the topic \textit{/warehouse/sensor/[sensor\_name]/register} where the controller subscribe and listening on the topic \textit{/warehouse/sensor/[sensor\_name]/register}.
+Temperature and humidity sensor periodically publish their reading to the topic \textit{/warehouse/sensor/[sensor\_name]/temperature} and \textit{/warehouse/sensor/[sensor\_name]/humidity} respectively. 
+The controller subscribes to these topics to receive real-time updates on environmental conditions.
+However, the camera sensor, only listen to the controller command on the topic \textit{/warehouse/sensor/[sensor\_name]/video/commands} to start or stop the video streaming.
+The controller control the video stream of camera by publishing command message to the topic \textit{/warehouse/sensor/[sensor\_name]/video/commands/startStream} and \textit{/warehouse/sensor/[sensor\_name]/video/commands/stopStream}.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/environmetal_monitoring_system.png}
+    \caption{Environmental Monitoring System MQTT Implementation}
+    \label{fig:environmental_monitoring_system}
+\end{figure}
+
+\textbf{Inventory Management System:} This subsystem illustrated in Figure \ref{fig:inventory_management_system}, is responsible for tracking and managing the inventory within the warehouse.
+Same as in the environmental monitoring system, all the inventory sensors register to controller using the topic \textit{/warehouse/sensor/[sensor\_name]/register} where the controller subscribe and listening on the topic \textit{/warehouse/sensor/[sensor\_name]/register}.
+The package sensor publish the notification message to the topic \textit{/warehouse/sensor/[sensor\_name]/package} whenever a package is arrived to warehouse.
+The controller subscribes to this topic and assign to the available robot to pick up the package and place on the rack.
+Both the rack sensor and dropzone sensor waits for the controller command on the topic \textit{/warehouse/rack/[sensor\_name]/commands} and \textit{/warehouse/dropzone/[sensor\_name]/commands} respectively.
+When the robot reaches to the rack, the controller publish the command to the topic \textit{/warehouse/rack/[sensor\_name]/commands/addPackage} to update the capacity of the rack.
+As soon as the dropzone receive request to retrieve the package, it notify the controller on the topic \textit{/warehouse/dropzone/[sensor\_name]/commands/retrievePackage} and controller assign robot to retrieve the package from the rack.
+Similar to place package operation, when the robot reaches to the rack, the controller publish the command to the topic \textit{/warehouse/rack/[sensor\_name]/commands/removePackage} to update the capacity of the rack.
+As soon as the robot  drop the package to the dropzone, the controller notify the customer or truck using the topic \textit{/warehouse/dropzone/[sensor\_name]/commands/dropPackage}.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/inventory_management_system.png}
+    \caption{Inventory Management System MQTT Implementation}
+    \label{fig:inventory_management_system}
+\end{figure}
+
+\textbf{Robot Management System:} This subsystem illustrated in Figure \ref{fig:robot_management_system}, manages the fleet of robots operating within the warehouse.
+All the robots register to controller using the topic \textit{/warehouse/robot/[robot\_name]/register} where the controller subscribe and listening on the topic \textit{/warehouse/robot/[robot\_name]/register}.
+All the PICKUP, PLACE, RETRIEVE, and DROP operation are assigned to the robot as task by the controller through the topic \textit{/warehouse/robot/[robot\_name]/command/assignTask}.
+When the robot complete the assigned task, it notify the controller by publishing message to the topic \textit{/warehouse/robot/[robot\_name]/status/taskCompleted}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/robot_management_system.png}
+    \caption{Robot Management System MQTT Implementation}
+    \label{fig:robot_management_system}
+\end{figure}
