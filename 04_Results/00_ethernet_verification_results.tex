@@ -1,0 +1,21 @@
+As for the first step, the implementation of MQTT protocol in NS-3 will be verified.
+In order to verify that our Implementation of MQTT protocol in NS-3 is functioning correctly,  we analyze the QoS metrics under different Ethernet speeds and payload sizes. 
+We conduct simulations with Ethernet speeds of 10 Mbps, 100 Mbps, and 1 Gbps, while varying the payload sizes from 100 bytes to 10,000 bytes.
+All of the three different level of QoS (0, 1, and 2) are tested in the simulations. 
+
+In MQTT protocol, base on the QoS levels, different ackowledgement messages are exchanged between the subscriber and broker to ensure the delivery of the messages.
+These different acknowledgement messages introduce additional overhead in the communication, which can impact the latency and throughput of the system.
+For the QoS level 0, there is no acknowledgement message exchanged between the subscriber and broker, resulting in the lowest latency and highest throughput.
+The QoS level 1 introduces a PUBACK message from the broker to the subscriber, which adds some overhead and increases the latency while slightly reducing the throughput while ensuring message delivery at least once.
+The QoS level 2 involves a four-step handshake process (PUBLISH, PUBREC, PUBREL, PUBCOMP) to guarantee that the message is delivered exactly once. 
+This process introduces the highest overhead, resulting in the highest latency and lowest throughput among the three QoS levels.
+The results of the simulations can be found in Figure~\ref{fig:ethernet_results} and simulation results show that it reflects the expected behavior of MQTT protocol under different QoS levels.
+As the Ethernet speed increases, the latency decreases and throughput increases for all QoS levels.
+Similarly, as the payload size increases, the latency increases and throughput decreases for all QoS levels
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\linewidth]{images/ethernet_result.png}
+    \caption{Comparison of QoS Metrics upon Varying Ethernet Speeds and Payload Sizes}
+    \label{fig:ethernet_results}
+\end{figure}

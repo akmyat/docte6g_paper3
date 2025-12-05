@@ -1,0 +1,42 @@
+\subsubsection{Deployment over 5G NR Connectivity}
+
+The performance of the three types of MQTT messages over 5G NR connectivity is analyzed in this subsection.
+The 5G deployment utilizes a standalone (SA) architecture with a 3.5 GHz frequency band.
+Different level of MQTT QoS levels (0, 1, and 2) are also taken into account while analyzing the performance.
+
+The Figure \ref{fig:5g_telemetry_results} depicts the results for telemetry messages over 5G NR connectivity.
+Across all QoS levels, measured delays remain nearly identical at approximately 23.46 m, indicating negligible sensitivity to QoS-induced overhead for small telemetry payloads in this 5G setup.
+This unusually flat performance contrasts with Ethernet and Wi-Fi results, where acknowledgment overhead clearly increased latency.
+In the 5G case, the dominant contributors to delay are radio scheduling latency, frame structure timing (TTI granularity), and core network traversal, which overshadow the incremental overhead introduced by MQTT acknowledgments for small payloads. As a result, improvements or changes in MQTT QoS levels do not significantly alter telemetry performance under 5G NR.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\linewidth]{images/5G_telemetry_results.png}
+    \caption{5G Telemetry Results for Smart Warehouse Digital Twin Application}
+    \label{fig:5g_telemetry_results}
+\end{figure}
+
+The Figure \ref{fig:5g_operations_results} depicts the results for operations messages over 5G NR connectivity.
+Package detection messages exhibits the highest latency, ranging from approximately 59 ms (QoS 0) to 55 ms (QoS 2).
+Other operation messages remain clustered around 22–34 ms, with only minor variations across QoS levels.
+Notably, increasing QoS does not consistently increase latency; in some cases QoS 2 achieves slightly lower delays than QoS 0, likely due to improved packet delivery reliability, fewer retransmission timeouts at the RLC/MAC layer, and more stable traffic scheduling.
+Overall, the results indicate that radio access and scheduling processes dominate latency performance for operation traffic, while MQTT acknowledgment overhead remains secondary.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\linewidth]{images/5G_operations_results.png}
+    \caption{5G Operations Results for Smart Warehouse Digital Twin Application}
+    \label{fig:5g_operations_results}
+\end{figure}
+
+The Figure \ref{fig:5g_control_results} depicts the results for control messages over 5G NR connectivity.
+Task assignment delays ranges between ~31.7 ms (QoS 0) and ~39.2 ms (QoS 1/2), while task completion messages consistently remain lower at approximately 25–26 ms across all QoS levels.
+The modest increase for assignment commands under higher QoS reflects the additional acknowledgment exchanges but remains comparatively small relative to the baseline radio access and scheduling delays inherent to the 5G system. Importantly, the differences between QoS levels are limited to single-digit milliseconds, confirming that control message latency is primarily constrained by wireless air-interface and core-network delays rather than MQTT protocol semantics.
+For real-time robotic coordination, this suggests that reliability-enhancing QoS levels can be safely employed over 5G NR without severely degrading control responsiveness.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\linewidth]{images/5G_control_results.png}
+    \caption{5G Control Results for Smart Warehouse Digital Twin Application}
+    \label{fig:5g_control_results}
+\end{figure}
