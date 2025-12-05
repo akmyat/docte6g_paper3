@@ -1,0 +1,43 @@
+As for the next step, we want to analyze the performance of traffic types that are generated in Smart Warehouse Digital Twin Application.
+All the communication between the digital twin components are carried through MQTT protocol over Ethernet.
+The MQTT messages exchanged between the components can be categorized into three types: telemetry, operations, and control messages.
+Telemetry messages include periodic updates from temperature and humidity sensors.
+Operations messages consist of commands sent between controllers and package detection sensors, racks and dropzone.
+Control messages are commands sent from the controller to moving robots to manage their navigation and tasks within the warehouse.
+The average payload sizes for all types of messages can be seen in Table \ref{tab:average_payload_sizes}.
+
+\begin{table}[ht!]
+    \caption{Average Payload Sizes of MQTT Messages in Smart Warehouse Digital Twin Application}
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{MQTT Message Type} & \textbf{Average Payload Size (bytes)} \\
+        \hline
+        Temperature telemetry&  81 \\
+        \hline
+        Humidity telemetry &  81 \\
+        \hline
+        Package detection operation &  158 \\
+        \hline
+        Rack Add Package operation &  119 \\
+        \hline
+        Rack Remove Package operation &  119 \\
+        \hline
+        Dropzone Retrieve Package operation &  100 \\
+        \hline
+        Dropzone Drop Package operation &  94 \\
+        \hline
+        Robot Assign Task control &  112 \\
+        \hline
+        Robot Task Complete control &  37 \\
+        \hline
+    \end{tabular}
+    \label{tab:average_payload_sizes}
+\end{table}
+
+The performance of these three types of traffic over Ethernet, WiFi, and 5G networks are analyzed in the following subsections in order to figure out the delay and packet loss experienced by each type of message in different network setups.
+
+\input{04_Results/001_ethernet_results.tex}
+
+\input{04_Results/002_wifi_results.tex}
+
+\input{04_Results/003_5g_results.tex}
