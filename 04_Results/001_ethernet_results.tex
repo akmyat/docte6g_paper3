@@ -21,8 +21,8 @@ The results for operations messages over Ethernet connectivity are shown in Figu
 The trend of average delay decreases with increasing Ethernet speed and increases with higher QoS levels is similar to the telemetry messages.
 Among the messages Rack Remove Package messages experiences packet loss for QoS level 0 due to the non-reliable delivery nature of this QoS level but using higher QoS levels (1 and 2) ensures reliable delivery of these messages without any packet loss.
 Under QoS 0, most operations fall below $30-90 \mu s$ delay for all three Ethernet speeds.
-Under QoS 1 and 2, the delays increase significantly due to the acknowledgment and retransmission mechanisms yet benefit from higher speeds, notablely for package detection messages.
-QoS 2 exhibits the highest delays, reach $>500 \mu s$ at 100 Mbps, decreasing below $200 \mu s$ by 10 Gbps, showing that although reliability mechanisms add overhead, sufficient link capcity can mitigate queuing effects for operational traffics.
+Under QoS 1 and 2, the delays increase significantly due to the acknowledgment and retransmission mechanisms yet benefit from higher speeds, notably for package detection messages.
+QoS 2 exhibits the highest delays, reach $>500 \mu s$ at 100 Mbps, decreasing below $200 \mu s$ by 10 Gbps, showing that although reliability mechanisms add overhead, sufficient link capacity can mitigate queuing effects for operational traffics.
 
 \begin{figure}[ht!]
     \centering
