@@ -20,10 +20,12 @@ An example code snippet for configuring and installing the MQTT broker applicati
         Ptr<MqttBrokerApp> broker = CreateObject<MqttBrokerApp>();
 
         // Configure broker attributes
-        broker->SetAttribute("ListeningPort", UintegerValue(1883));   // Default MQTT port
-        broker->SetAttribute("MaxQoSLevel", UintegerValue(2));        // QoS 0–2 supported
+        // Default MQTT port
+        broker->SetAttribute("ListeningPort", UintegerValue(1883));   
+        // QoS 0–2 supported
+        broker->SetAttribute("MaxQoSLevel", UintegerValue(2));
         broker->SetAttribute("ConnectionTimeout", TimeValue(Seconds(30)));
-        broker->SetAttribute("RetransmitTimeout", TimeValue(Seconds(2)));
+        broker->SetAttribute("RetransmitTimeout", TimeValue(Seconds(0.01)));
 
         // Install on broker node
         brokerNode->AddApplication(broker);
