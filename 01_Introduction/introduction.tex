@@ -1,41 +1,20 @@
 \section{Introduction}
 
-Industry 4.0 has transformed traditional logistics into Smart Warehouses. 
-In these environments, Cyber-Physical Systems (CPS) and Digital Twins (DT) manage complex tasks with very little human help. 
-A Digital Twin is a virtual replica of a physical system. 
-To work correctly, it must stay in sync with physical assets—such as mobile robots, and sensors—in near real-time. 
-The performance of a Digital Twin depends entirely on the connection between the virtual model and the real world. 
-If there is a delay or data is lost, the virtual model will not match reality. 
-This "desynchronization'' can cause failures in safety controls and maintenance systems.
+The rapid adoption of Industry 4.0 principles has transformed conventional warehouse operations into large-scale Cyber-Physical Systems (CPS) where Digital Twins (DTs) continuously interact with fleets of robots, sensors, and automated storage infrastructure. A DT provides a virtual representation of physical processes, and its usefulness depends critically on the timeliness and reliability of the communication link that synchronizes state between both domains. Even small disruptions or delays may result in desynchronization, leading to degraded operational efficiency or safety risks in autonomous systems.
 
-To keep these systems synchronized, the Message Queuing Telemetry Transport (MQTT) protocol has become the standard for the Industrial Internet of Things (IIoT). 
-MQTT is lightweight and uses a ``publish-subscribe'' model. 
-This allows sensors to send data efficiently without needing a constant, direct link to the central controllers. 
-However, depending on underlying network infrastructure, MQTT performance can vary widely.
-Modern warehouses can be implemented with different types of network such as wired Ethernet, Wi-Fi, and 5G New Radio (NR).
-These networks have different characteristics in terms of latency, reliability, and coverage.
-Therefore, it is essential to test these communication networks before building them to verify that it meet the requirement of Digital Twin applications, save money and reduce safety risks.
+MQTT has emerged as the de facto industrial messaging protocol supporting this synchronization layer due to its lightweight publish–subscribe model and configurable Quality of Service (QoS) semantics. However, MQTT behavior is tightly coupled to the characteristics of the underlying network—wired Ethernet, Wi-Fi, or emerging 5G NR—and choosing the appropriate connectivity technology is non-trivial for latency-sensitive and reliability-critical DT workloads. Evaluating these tradeoffs in real deployments is costly and impractical, making high-fidelity network simulation essential.
 
-Network simulation is the best way to verify these systems before deployment. 
-The ns-3 simulator is a widely respected tool in academic research because it models networks very accurately. 
-However, ns-3 currently has a major gap: it lacks a native, open-source model for MQTT. 
-Previous attempts to add MQTT to ns-3 often used closed code that researchers could not change or extend. 
-This makes it hard to properly test how application protocols perform over modern wireless networks like 5G and Wi-Fi 6.
+Despite the prominence of ns-3 as a platform for cross-layer network evaluation, the simulator lacks a transparent and extensible MQTT implementation. Existing attempts provide only binary artifacts or partial functionality, preventing researchers from studying MQTT interactions with modern wireless stacks. This absence restricts realistic DT evaluations, particularly when heterogeneous traffic types—robot-control commands, periodic telemetry, and video streams—need to be jointly assessed.
 
-To address this research gap by providing a complete, open-source MQTT v3.1.1 module for ns-3. 
-Using this new module, we created a realistic Smart Warehouse scenario to test the protocol's performance. 
-Our main contributions are:
+To address this limitation, we develop a full MQTT v3.1.1 stack for ns-3, including client and broker applications supporting QoS 0/1/2, session persistence, retransmission logic, and topic-based routing. Using this module, we design a Smart Warehouse DT scenario that captures representative operational dynamics and evaluate MQTT performance across Ethernet, Wi-Fi 6, and 5G NR. The contributions of this paper are:
+
 \begin{enumerate}
-    \item \textbf{Development of a Native ns-3 MQTT Module:} We built a transparent MQTT Client and Broker that supports all Quality of Service (QoS) levels (0, 1, and 2). 
-    This allows for deep analysis within the simulator.
+    \item \textbf{Native MQTT Implementation for ns-3:} 
+    A fully open-source MQTT client and broker supporting all control packets, QoS semantics, and session management, is implemented. 
     
-    \item \textbf{Smart Warehouse Scenario Design:} We designed a realistic industrial environment with different types of data traffic, including fast robot control commands, regular sensor updates, and heavy video streams.
+    \item \textbf{Smart Warehouse DT Design:} A realistic model of heterogeneous traffic flows—robot control, environmental telemetry, and inventory operations—reflective of industrial automation requirements, is presnted.
     
-    \item \textbf{Comparative Network Analysis:} We systematically tested MQTT performance over Ethernet, Wi-Fi 6, and 5G NR. 
-    By measuring speed and reliability across these networks, we provide real data to help industries choose the best connection for their needs.
+    \item \textbf{Comparative Multi-Technology Evaluation:} A systematic performance study of MQTT over Ethernet, Wi-Fi 6, and 5G NR, is presented, highlighting how network characteristics influence DT synchronization and reliability.
 \end{enumerate}
 
-The rest of this paper is organized as follows: Section II reviews previous work on IIoT protocols and simulation. 
-Section III explains our methodology, including the new ns-3 MQTT module and the warehouse scenario. 
-Section IV presents the results of our simulations. 
-Finally, Section V concludes the study and suggests future research.
+The remainder of the paper reviews relevant literature, describes the MQTT module and simulation methodology, presents the comparative results, and discusses implications for real-world DT deployments.

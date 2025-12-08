@@ -1,17 +1,26 @@
-As for the first step, the implementation of MQTT protocol in NS-3 will be verified.
-In order to verify that our Implementation of MQTT protocol in NS-3 is functioning correctly,  we analyze the QoS metrics under different Ethernet speeds and payload sizes. 
-We conduct simulations with Ethernet speeds of 10 Mbps, 100 Mbps, and 1 Gbps, while varying the payload sizes from 100 bytes to 10,000 bytes.
-All of the three different level of QoS (0, 1, and 2) are tested in the simulations. 
+To verify functional accuracy of the MQTT v3.1.1 implementation, we measured application latency and throughput under controlled Ethernet conditions. Ethernet data rates of 10 Mbps, 100 Mbps, and 1 Gbps were combined with payload sizes ranging from 100 bytes to 10 kB, and all QoS levels (0, 1, 2) were evaluated.
 
-In MQTT protocol, base on the QoS levels, different ackowledgement messages are exchanged between the subscriber and broker to ensure the delivery of the messages.
-These different acknowledgement messages introduce additional overhead in the communication, which can impact the latency and throughput of the system.
-For the QoS level 0, there is no acknowledgement message exchanged between the subscriber and broker, resulting in the lowest latency and highest throughput.
-The QoS level 1 introduces a PUBACK message from the broker to the subscriber, which adds some overhead and increases the latency while slightly reducing the throughput while ensuring message delivery at least once.
-The QoS level 2 involves a four-step handshake process (PUBLISH, PUBREC, PUBREL, PUBCOMP) to guarantee that the message is delivered exactly once. 
-This process introduces the highest overhead, resulting in the highest latency and lowest throughput among the three QoS levels.
-The results of the simulations can be found in Figure~\ref{fig:ethernet_results} and simulation results show that it reflects the expected behavior of MQTT protocol under different QoS levels.
-As the Ethernet speed increases, the latency decreases and throughput increases for all QoS levels.
-Similarly, as the payload size increases, the latency increases and throughput decreases for all QoS levels
+The results, summarized in Fig. \ref{fig:ethernet_results}, exhibit the expected MQTT behavior across QoS classes. QoS 0 consistently yields the lowest latency and highest throughput since no acknowledgment exchange occurs. QoS 1 introduces a single PUBACK handshake, resulting in moderate latency increases and slightly reduced throughput. QoS 2 exhibits the highest protocol overhead due to the four-step handshake (PUBLISH–PUBREC–PUBREL–PUBCOMP), producing the largest latency penalty and the lowest throughput.
+
+As link capacity increases, latency decreases proportionally across all QoS levels, particularly for small payloads. Throughput scales linearly with Ethernet rate, while the relative impact of QoS overhead remains constant. Increasing payload size yields near-linear latency growth and inverse throughput changes across all QoS levels. Overall, the results validate that the implemented MQTT stack conforms to protocol-level expectations and interacts correctly with ns-3’s transport and queueing models.
+
+
+
+
+
+% In order to verify that our implementation of MQTT protocol in NS-3 is functioning correctly,  we analyze the QoS metrics under different Ethernet speeds and payload sizes. 
+% We conduct simulations with Ethernet speeds of 10 Mbps, 100 Mbps, and 1 Gbps, while varying the payload sizes from 100 bytes to 10,000 bytes.
+% All of the three different level of QoS (0, 1, and 2) are tested in the simulations. 
+
+% In MQTT protocol, based on the QoS levels, different acknowledgement messages are exchanged between the subscriber and the broker to ensure the delivery of the messages.
+% These different acknowledgement messages introduce additional overhead in the communication, which can impact the latency and throughput of the system.
+% For the QoS level 0, there is no acknowledgement message exchanged between the subscriber and broker, resulting in the lowest latency and the highest throughput.
+% The QoS level 1 introduces a PUBACK message from the broker to the subscriber, which adds some overhead and increases the latency while slightly reducing the throughput while ensuring message delivery at least once.
+% The QoS level 2 involves a four-step handshake process (PUBLISH, PUBREC, PUBREL, PUBCOMP) to guarantee that the message is delivered exactly once. 
+% This process introduces the highest overhead, resulting in the highest latency and lowest throughput among the three QoS levels.
+% The results of the simulations can be found in Figure~\ref{fig:ethernet_results} and simulation results show that it reflects the expected behavior of MQTT protocol under different QoS levels.
+% As the Ethernet speed increases, the latency decreases and throughput increases for all QoS levels.
+% Similarly, as the payload size increases, the latency increases and throughput decreases for all QoS levels.
 
 \begin{figure}[ht!]
     \centering

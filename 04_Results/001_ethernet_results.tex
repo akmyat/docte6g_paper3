@@ -1,14 +1,8 @@
 \subsubsection{Deployment over Ethernet Connectivity}
 
-The performance of the three types of MQTT messages over Ethernet connectivity is analyzed in this subsection.
-Three different Ethernet speeds (100 Mbps, 1 Gbps, and 10 Gbps) are considered for the analysis.
-Different level of MQTT QoS levels (0, 1, and 2) are also taken into account while analyzing the performance.
+Figure \ref{fig:ethernet_telemetry_results} presents latency measurements for telemetry messages under three Ethernet data rates: 100 Mbps, 1 Gbps, and 10 Gbps. Telemetry delays increase monotonically with QoS level, rising from 47 µs (QoS 0) to 207 µs (QoS 2) at 100 Mbps due to cumulative acknowledgment overhead. Higher link speeds yield lower delays, though improvements saturate at QoS 1 and QoS 2 because handshake latency dominates.
 
-The results for telemetry messages over Ethernet connectivity are shown in Figure~\ref{fig:ethernet_telemetry_results}.
-As the level of QoS increases, the average delay increases from $47 \mu s$, $75 \mu s$, to $207 \mu s$ for 100 Mbps Ethernet speed.
-This is due to the additional overhead for ensuring message delivery.
-It can be observed that as the Ethernet speed increases, the average delay experienced by telemetry messages decreases from $47 \mu s$, $45 \mu s$, to $37 \mu s$ for QoS level 0.
-But for QoS levels 1 and 2, the reduction of average delay is significantly small when the Ethernet speed increases from 1 Gbps to 10 Gbps.
+
 
 \begin{figure}[ht!]
     \centering
@@ -17,12 +11,7 @@ But for QoS levels 1 and 2, the reduction of average delay is significantly smal
     \label{fig:ethernet_telemetry_results}
 \end{figure}
 
-The results for operations messages over Ethernet connectivity are shown in Figure~\ref{fig:ethernet_operations_results}.
-The trend of average delay decreases with increasing Ethernet speed and increases with higher QoS levels is similar to the telemetry messages.
-Among the messages Rack Remove Package messages experiences packet loss for QoS level 0 due to the non-reliable delivery nature of this QoS level but using higher QoS levels (1 and 2) ensures reliable delivery of these messages without any packet loss.
-Under QoS 0, most operations fall below $30-90 \mu s$ delay for all three Ethernet speeds.
-Under QoS 1 and 2, the delays increase significantly due to the acknowledgment and retransmission mechanisms yet benefit from higher speeds, notablely for package detection messages.
-QoS 2 exhibits the highest delays, reach $>500 \mu s$ at 100 Mbps, decreasing below $200 \mu s$ by 10 Gbps, showing that although reliability mechanisms add overhead, sufficient link capcity can mitigate queuing effects for operational traffics.
+Operational message results (Fig. \ref{fig:ethernet_operations_results}) exhibit similar trends. While most operational messages remain below 30–90 µs under QoS 0 for all Ethernet speeds, QoS 1 and QoS 2 introduce substantial delay inflation. Notably, Rack Remove Package messages experience sporadic packet loss under QoS 0 due to its at-most-once delivery semantics; all loss disappears under QoS 1/2, confirming correct reliability handling. QoS 2 delays exceed 500 µs at 100 Mbps but drop below 200 µs at 10 Gbps.
 
 \begin{figure}[ht!]
     \centering
@@ -31,13 +20,10 @@ QoS 2 exhibits the highest delays, reach $>500 \mu s$ at 100 Mbps, decreasing be
     \label{fig:ethernet_operations_results}
 \end{figure}
 
-The results for control messages over Ethernet connectivity are shown in Figure~\ref{fig:ethernet_control_results}.
-Among the control messages, the assign task message have higher payload size (112 bytes) compared to the complete task message (37 bytes).
-Under QoS 0, the difference of average delay between these two messages is not significant across all three Ethernet speeds.
-However, under QoS levels 1 and 2, the assign task message experiences higher average delay compared to the complete task message due to the larger payload size.
-Only QoS 0 ensures that average delay remain below $20 ms$ for both control messages across all three Ethernet speeds while QoS levels 1 and 2 were not able to meet this requirement as average delays exceed $70 ms$ for assign task messages.
-Higher delays are observed because the robots are moving around the warehouse and connectivity degradations may occur, leading to retransmissions and increased latency.
-As QoS level 0 does not guarantee reliable delivery of messages, deployment over ethernet connectivity does not meet the requirements for control messages in smart warehouse digital twin application.
+
+
+Control message performance is shown in Fig. \ref{fig:ethernet_operations_results}. Although payloads are small (112 bytes for assignment, 37 bytes for completion), QoS 1 and QoS 2 incur substantial latency due to retransmission and handshake timing. Only QoS 0 maintains sub-20 ms delay across all Ethernet configurations. Under QoS 1/2, robot mobility and link variability further exacerbate delays, causing assignment commands to frequently exceed 70 ms. These findings indicate that Ethernet with QoS 0 meets latency requirements ($<20$ ms) for robot control, but QoS 1–2 introduce excessive delay unless reliability is externally guaranteed.
+
 
 \begin{figure}[ht!]
     \centering
